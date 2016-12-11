@@ -1,113 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head><style type="text/css">.caja2 {background-color: #C9EAF3;	position: absolute;	float: left; border-radius: 24px;}
-.caja2a {margin : 2%;}
-.caja3 {margin : 2%;}
-.caja2b {margin : 2%;}
-h5 {color: #006400 }
-
-draggable { width: 150px; height: 150px; padding: 0.5em; }
-</style>
-
-
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript"></script>
-<title>Ejemplo</title>
-<meta charset="utf-8">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css">
+<head>
+<meta charset="utf-8" name="viewport" content="width=divice">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 
-</head>
-<body style="cursor: auto;">
-<div class="caja2 ui-draggable ui-draggable-handle" id="draggable" style="left: 219px; top: 69px;">
-  <div class="caja3">
-  <h5 align="center"> <strong>Buenos días, bienvenido a la calculadora de Be@Crows </strong></h5>
-    </div>
-<div class="caja2a" align="center">
+<title>geos</title>  
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="http://geos.neocities.org/gmaps.js"></script>
+<style type="text/css">
+body{
+font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif }
   
-<form class="form-inline">    
-    <div class="input-group">
-      <div class="input-group-addon"> <span class="glyphicon glyphicon-star" aria-hidden="true"></span></div>
-      <input type="text" class="form-control" id="n1" placeholder="INGRESE NUMERO">
-      <div class="input-group-addon"><span class="glyphicon glyphicon-star" aria-hidden="true">
-
-        </span></div>
-</div>
-</form>
-</div>  
-<div class="caja2b" align="center"> 
-    <p>
-    <button id="cuadrado" class="btn btn-success">x<sup>2</sup></button>
-    <button id="inverso" class="btn btn-success"> 1/x </button>  
-    <button id="raiz" class="btn btn-success">vx</button>
-    <button id="entero" class="btn btn-success">ent</button>
-    <button id="potencial" class="btn btn-success">2<sup>x</sup></button>
-    <button id="factorial" class="btn btn-success">x!</button>
-    </p> 
-    <p>
-    <button id="mas" class="btn btn-warning">+</button>
-    <button id="menos" class="btn btn-warning">-</button>  
-    <button id="multiplicar" class="btn btn-warning">*</button>
-    <button id="dividir" class="btn btn-warning"> / </button>  
-    </p>
-    <p>
-    <button id="numero" class="btn btn-info">x</button>
-    <button id="potencia" class="btn btn-info">y ?</button> 
-      <button id="" class="btn btn-info"></button> 
-      <button id="sumas" class="btn btn-info">S(x)</button> 
-      <button id="productos" class="btn btn-info">P(x)</button> 
-    </p>
-    <p>
-    <button id="calcular" class="btn btn-danger">=</button>   
-    </p> 
+#map2 { height: 50px; width: 600px; float: none;}
+#map { height: 500px; width: 850px; float: none;}
+#map1 { height: 500px; width: 850px; float: none;}
  
-   </div>
-   <div class="caja3">
-    <h6 align="center">be@crows_2016</h6> </div>
-  </div>
+    
+</style>
+  <script type="text/javascript">
+    var map, lat, lng, x, y, map1;
+
+    $(
+      
+      function(){
+      
+        function enlazarMarcador(e){ // muestra ruta entre marcas anteriores y actuales
+          map.drawRoute({
+            origin: [lat, lng],  // origen en coordenadas anteriores
+            // destino en coordenadas del click o toque actual
+            destination: [e.latLng.lat(), e.latLng.lng()],
+            travelMode: 'driving',
+            strokeColor: '#CC0033',
+            strokeOpacity: 0.6,
+            strokeWeight: 3, });
+        
+          lat = e.latLng.lat();   // guarda coords para marca siguiente
+          lng = e.latLng.lng();
+        
+          map.addMarker({ lat: lat, lng: lng, }); // pone marcador en mapa
+          map.setCenter(lat, lng)  };
+     
+        function geolocalizar(){
+          GMaps.geolocate({
+                success: function (position){
+                     lat = position.coords.latitude,  // guarda coords en lat y lng
+                     lng = position.coords.longitude,
+                     x = position.coords.latitude,  // guarda coords en lat y lng
+                     y = position.coords.longitude,
+                     map = new GMaps({  // muestra mapa centrado en coords [lat, lng]
+                          el: '#map',
+                          lat: lat,
+                          lng: lng,
+                          click: enlazarMarcador,
+                          tap: enlazarMarcador }),
+                     map.setZoom (16),
+                     map1 = GMaps.createPanorama({
+                         el: '#map1',
+                         lat: lat,
+                         lng: lng, }),
+                     map.addMarker({ lat: lat, lng: lng}) }, // marcador en [lat, lng]
+                          
+                error: function(error) { alert('Geolocalización falla: '+error.message) },
+                not_supported: function(){ alert("Su navegador no soporta geolocalización") },
+        });
+      };
+
+      geolocalizar();
+        
+         }
+ )
+       
+      function dibujar(){
+         var myLatlng = new google.maps.LatLng(lat, lng);
+         var mapOptions = {
+          zoom: 14,
+           center: ({ lat: x+(lat-x)/2, lng: ((((lng-y)/(lat-x))*((x+(lat-x)/2)-x))+y)})
+         
+        };
+                     
+        var mapx = new google.maps.Map(document.getElementById('map'), mapOptions);        
+        var mapy = new google.maps.TrafficLayer();
+        mapy.setMap(mapx);
+        var marker = new google.maps.Marker({ position: myLatlng,      
+        map: mapx, animation:google.maps.Animation.BOUNCE });
+        var marker = new google.maps.Marker({ position: ({ lat: x, lng: y}),      
+        map: mapx, animation:google.maps.Animation.BOUNCE });
+        
+        
+}
   
-    <script>$("#n1").on("click",function(){ $("#n1").val("");} );
-  $("#cuadrado").on("click",function(){ var num = $("#n1"); num.val(num.val() * num.val()); });
-  $("#inverso").on("click",function(){ var num = $("#n1"); num.val(1/num.val()); });
-  $("#raiz").on("click",function(){ var num = $("#n1"); num.val(Math.sqrt(num.val())); });
-  $("#entero").on("click",function(){ var num = $("#n1"); if ( num.val() >= 0){ num.val(Math.floor(num.val())); } else { num.val(-Math.floor(num.value())); }});
-  $("#potencial").on("click",function() { var num = $("#n1"); num.val(Math.pow(2,(num.val())));});
-  $("#factorial").on("click",function(){ var num = $("#n1"); x=num.val(); y=1; for (var i=1; i<=x; i++) {y = y*i;} num.val(y);}); 
+        function calle(){
+          map = GMaps.createPanorama({
+          el: '#map1',
+          lat : lat,
+          lng : lng,
+          });
+          }
+  
+function limpiar(){
+          
+      document.location.reload(false);
+        }
 
-var acc = 0; var op = ""; var acc1 = 0;
-$("#mas").on("click",function() { var num = $("#n1"); acc = num.val();  op = "+"; });
-$("#menos").on("click",function() { var num = $("#n1"); acc = num.val();  op = "-"; });
-$("#multiplicar").on("click",function() { var num = $("#n1"); acc = num.val();  op = "*"; });
-$("#dividir").on("click",function() { var num = $("#n1"); acc = num.val();  op = "/"; });
-$("#numero").on("click",function() { var num = $("#n1"); acc = num.val(); });
-$("#potencia").on("click",function() { var num = $("#n1"); acc1 = num.val();  op = "y"; });
-$("#calcular").on("click",function() { var num = $("#n1");
-  if (op === "+") {num.val(+acc + +num.val());}  
-                                      
-  if (op === "-") {num.val(+acc - +num.val());}
-  if (op === "*") {num.val(+acc * +num.val());}
-  if (op === "/") {num.va(+acc / +num.val());}
-  if (op === "y") {num.val(Math.pow(acc, acc1));}});
-
-$("#sumas").on("click",function() { var num = $("#n1");
-  var lista = num.val().split(",");
-for (var i=0, acc=0; i<lista.length; i++)
-  acc += +lista[i];
-num.val(acc);
-});
-
-$("#productos").on("click",function() { var num = $("#n1");
-  var lista = num.val().split(",");
-for (var i=0, acc=0; i<lista.length; i++)
-  acc = lista[i]*lista[i-1];
-num.val(acc);
-});
-
- $(function() {
-    $( "#draggable" ).draggable();
-  });
- </script></body>
+ 
+</script>
+</head>
+<body>
+  <!--<h1 style="color:orangered" >BeCrows@geo</h1>-->
+  <div id="map2">
+  <button type="button" class="btn btn-primary btn-lg" onclick="dibujar()">DIBUJAR RUTA</button>    
+  <button type="button" class="btn btn-info btn-lg" onclick="calle()">MOSTRAR UBICACION</button>
+  <button type="button" class="btn btn-primary btn-lg" onclick="limpiar()">AGAIN</button>
+</div><br>
+  <div id="map"></div>
+  <div id="map1"></div>
+</body>
+</html>

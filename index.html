@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head><style type="text/css">.caja2 {background-color: #C9EAF3;	position: absolute;	float: left; border-radius: 24px;}
+.caja2a {margin : 2%;}
+.caja3 {margin : 2%;}
+.caja2b {margin : 2%;}
+h5 {color: #006400 }
+
+draggable { width: 150px; height: 150px; padding: 0.5em; }
+</style>
+
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript"></script>
+<title>Ejemplo</title>
+<meta charset="utf-8">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</head>
+<body style="cursor: auto;">
+<div class="caja2 ui-draggable ui-draggable-handle" id="draggable" style="left: 219px; top: 69px;">
+  <div class="caja3">
+  <h5 align="center"> <strong>Buenos días, bienvenido a la calculadora de Be@Crows </strong></h5>
+    </div>
+<div class="caja2a" align="center">
+  
+<form class="form-inline">    
+    <div class="input-group">
+      <div class="input-group-addon"> <span class="glyphicon glyphicon-star" aria-hidden="true"></span></div>
+      <input type="text" class="form-control" id="n1" placeholder="INGRESE NUMERO">
+      <div class="input-group-addon"><span class="glyphicon glyphicon-star" aria-hidden="true">
+
+        </span></div>
+</div>
+</form>
+</div>  
+<div class="caja2b" align="center"> 
+    <p>
+    <button id="cuadrado" class="btn btn-success">x<sup>2</sup></button>
+    <button id="inverso" class="btn btn-success"> 1/x </button>  
+    <button id="raiz" class="btn btn-success">vx</button>
+    <button id="entero" class="btn btn-success">ent</button>
+    <button id="potencial" class="btn btn-success">2<sup>x</sup></button>
+    <button id="factorial" class="btn btn-success">x!</button>
+    </p> 
+    <p>
+    <button id="mas" class="btn btn-warning">+</button>
+    <button id="menos" class="btn btn-warning">-</button>  
+    <button id="multiplicar" class="btn btn-warning">*</button>
+    <button id="dividir" class="btn btn-warning"> / </button>  
+    </p>
+    <p>
+    <button id="numero" class="btn btn-info">x</button>
+    <button id="potencia" class="btn btn-info">y ?</button> 
+      <button id="" class="btn btn-info"></button> 
+      <button id="sumas" class="btn btn-info">S(x)</button> 
+      <button id="productos" class="btn btn-info">P(x)</button> 
+    </p>
+    <p>
+    <button id="calcular" class="btn btn-danger">=</button>   
+    </p> 
+ 
+   </div>
+   <div class="caja3">
+    <h6 align="center">be@crows_2016</h6> </div>
+  </div>
+  
+    <script>$("#n1").on("click",function(){ $("#n1").val("");} );
+  $("#cuadrado").on("click",function(){ var num = $("#n1"); num.val(num.val() * num.val()); });
+  $("#inverso").on("click",function(){ var num = $("#n1"); num.val(1/num.val()); });
+  $("#raiz").on("click",function(){ var num = $("#n1"); num.val(Math.sqrt(num.val())); });
+  $("#entero").on("click",function(){ var num = $("#n1"); if ( num.val() >= 0){ num.val(Math.floor(num.val())); } else { num.val(-Math.floor(num.value())); }});
+  $("#potencial").on("click",function() { var num = $("#n1"); num.val(Math.pow(2,(num.val())));});
+  $("#factorial").on("click",function(){ var num = $("#n1"); x=num.val(); y=1; for (var i=1; i<=x; i++) {y = y*i;} num.val(y);}); 
+
+var acc = 0; var op = ""; var acc1 = 0;
+$("#mas").on("click",function() { var num = $("#n1"); acc = num.val();  op = "+"; });
+$("#menos").on("click",function() { var num = $("#n1"); acc = num.val();  op = "-"; });
+$("#multiplicar").on("click",function() { var num = $("#n1"); acc = num.val();  op = "*"; });
+$("#dividir").on("click",function() { var num = $("#n1"); acc = num.val();  op = "/"; });
+$("#numero").on("click",function() { var num = $("#n1"); acc = num.val(); });
+$("#potencia").on("click",function() { var num = $("#n1"); acc1 = num.val();  op = "y"; });
+$("#calcular").on("click",function() { var num = $("#n1");
+  if (op === "+") {num.val(+acc + +num.val());}  
+                                      
+  if (op === "-") {num.val(+acc - +num.val());}
+  if (op === "*") {num.val(+acc * +num.val());}
+  if (op === "/") {num.va(+acc / +num.val());}
+  if (op === "y") {num.val(Math.pow(acc, acc1));}});
+
+$("#sumas").on("click",function() { var num = $("#n1");
+  var lista = num.val().split(",");
+for (var i=0, acc=0; i<lista.length; i++)
+  acc += +lista[i];
+num.val(acc);
+});
+
+$("#productos").on("click",function() { var num = $("#n1");
+  var lista = num.val().split(",");
+for (var i=0, acc=0; i<lista.length; i++)
+  acc = lista[i]*lista[i-1];
+num.val(acc);
+});
+
+ $(function() {
+    $( "#draggable" ).draggable();
+  });
+ </script></body>
